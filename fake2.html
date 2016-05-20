@@ -7,7 +7,6 @@
 
    <meta http-equiv="Window-target" content="_top" />
    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
-   <link rel="stylesheet" type="text/css" href="../../../css/mainstyle.css" />
 
 	<link rel="stylesheet" type="text/css" href="PD.css" />
 	<script type="text/javascript" src="basic.js"></script>
@@ -17,7 +16,7 @@
   <center>
      <div class="landingtext">
         <div class="quote">
-           <h1 id= "title" style="margin-bottom:5px;">Repeated Prisoner's Dilemma</h1>
+           <h1 id= "title" style="margin-bottom:5px;">Iterative Prisoner's Dilemma</h1>
         </div>
      </div>
      <div id="PDwrapper">
@@ -25,14 +24,44 @@
   		<tr><th></th><th></th><th colspan="2" id="opponentName">Opponent 1</th></tr>
   		<tr><th></th><th></th><th>Cooperate</td><th>Defect</th></tr>
   		<tr><th rowspan="2" style="text-align:right;padding-right:1em;">You</th>
-  			<th><input type="button" value="Cooperate" onClick="cooperate()" id="bCooperate" /></th><td id="o11">20, 20</td><td id="o10"> 0, 30</td></tr>
+  			<th><input type="button" value="Cooperate" onClick="cooperate()" id="bCooperate" /></th><td class='editable' id="o11"></td><td class='editable' id="o10"> </td></tr>
   		<tr>
-  			<th><input type="button" value="Defect" onClick="defect()" id="bDefect" /></th><td id="o01"> 30,  0</td><td id="o00">10, 10</td></tr>
+  			<th><input type="button" value="Defect" onClick="defect()" id="bDefect" /></th><td class='editable' id="o01"></td><td class='editable' id="o00"></td></tr>
   		<tr><th colspan="4">&nbsp;</th></tr>
   		<tr><th colspan="4" id="status"></th></tr>
   		<tr><th colspan="4">&nbsp;</th></tr>
   		<tr><th colspan="4" id="status2"></th></tr>
+      <script type="text/javascript">
+        $(function () {
+            //Loop through all Labels with class 'editable'.
+            $(".editable").each(function () {
+                //Reference the Label.
+                var label = $(this);
+                //Add a TextBox next to the Label.
+                label.after("<input type = 'text' style = 'display:none' />");
+                //Reference the TextBox.
+                var textbox = $(this).next();
+                //Set the name attribute of the TextBox.
+                textbox[0].name = this.id.replace("lbl", "txt");
+                //Assign the value of Label to TextBox.
+                textbox.val(label.html());
+                //When Label is clicked, hide Label and show TextBox.
+                label.click(function () {
+                    $(this).hide();
 
+                    $(this).next().show();
+                });
+                //When focus is lost from TextBox, hide TextBox and show Label.
+                textbox.focusout(function () {
+                    $(this).hide();
+                    $(this).prev().html($(this).val());
+                    inputCustomValues(this);
+                    $(this).prev().show();
+                });
+
+            });
+        });
+        </script>
 
   	  </table>
 
@@ -42,20 +71,24 @@
          for (var i = 1; i <= TOTALROUNDS; i++) {
   		  document.write("<tr class='totals'><td>"+i+"</td><td></td><td></td></tr>");
   		 }
+       document.write("<tr class='totals'><th>Average</th><th></th><th></th></tr>");
   		</script>
 
 
   	  </table>
 
+      <input type="button" value="Reset Game" onClick="resetGame()" id="bReset" /></th>
+      <button id=changeTotalRounds onclick="changeTotalRounds()">Change number of rounds</button>
      <div style="height:1px;clear:both;">&nbsp;</div>
      </div>
   </center>
 </body>
 
-<button id=changeTotalRounds onclick="changeTotalRounds()">Change number of rounds</button>
-<button id=changePayoutStructure onclick="changePayoutStructure()">Change payout structure</button>
 
-<th><input type="button" value="Reset Entire Game" onClick="resetGame()" id="bReset" /></th>
+<!-- <button id=changePayoutStructure onclick="changePayouts()">Change payouts</button> -->
+<!-- <button id=changePayoutStructure onclick="addPayouts()">Add payouts</button> -->
+
+<th>
 <p id="demo"></p>
 
 

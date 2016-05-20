@@ -1,27 +1,88 @@
 // defaultPayouts here are not tied to the table displayed, must be edited separately
 var defaultPayouts = [
 	[ [ 20 , 20 ] , [ 0 , 30 ] ],
-	[ [ 30 , 0 ] , [ 10 , 10 ] ],
+	[ [ 30 , 0 ] , [ -10 , -10 ] ],
 ];
 // results display requires TOTALROUNDS >= TOTALOPPONENTS+2
 // Easy to fix later
-var TOTALROUNDS = 25; //default is 25
-var TOTALOPPONENTS = 3; //default is 5
+var TOTALROUNDS = 15; //default is 15
+var TOTALOPPONENTS = 5; //default is 5
+
+
+
+function inputDefaultValues(){
+	var o11val = parseInt($('#o11').text(defaultPayouts[0][0]));
+	var o10val = parseInt($('#o10').text(defaultPayouts[0][1]));
+	var o01val = parseInt($('#o01').text(defaultPayouts[1][0]));
+	var o00val = parseInt($('#o00').text(defaultPayouts[1][1]));
+	$('#o11').append(o11val);
+	$('#o10').append(o10val);
+	$('#o01').append(o01val);
+	$('#o00').append(o00val);
+}
+
+function inputCustomValues(textbox){
+	var newVals = $(textbox).val().split(",").map(function(element){
+		return parseInt(element.trim());
+	});
+	console.log(newVals);
+	switch ($(textbox).attr("name")){
+		case "o11":
+			defaultPayouts[0][0] = newVals;
+		break;
+		case "o01":
+			defaultPayouts[1][0] = newVals;
+		break;
+		case "o10":
+			defaultPayouts[0][1] = newVals;
+		break;
+		case "o00":
+			defaultPayouts[1][1] = newVals;
+		break;
+	}
+	$(textbox).prev().html(newVals.join(","));
+}
+
+window.onload = function(){inputDefaultValues();};
+
+function changePayouts(){
+
+	var o11val = parseInt($('#o11').text(defaultPayouts[0][0]));
+	var o10val = parseInt($('#o10').text(defaultPayouts[0][1]));
+	var o01val = parseInt($('#o01').text(defaultPayouts[1][0]));
+	var o00val = parseInt($('#o00').text(defaultPayouts[1][1]));
+	$('#o11').append(o11val);
+	$('#o10').append(o10val);
+	$('#o01').append(o01val);
+	$('#o00').append(o00val);
+}
+
+function addPayouts(){
+	var o11val = parseInt($('#o11').text(defaultPayouts[0][0]));
+	var o10val = parseInt($('#o10').text(defaultPayouts[0][1]));
+	var o01val = parseInt($('#o01').text(defaultPayouts[1][0]));
+	var o00val = parseInt($('#o00').text(defaultPayouts[1][1]));
+	$('#o11').append(o11val);
+	$('#o10').append(o10val);
+	$('#o01').append(o01val);
+	$('#o00').append(o00val);
+}
 
 function changeTotalRounds() {
      TOTALROUNDS = parseInt(prompt("Tell me how many rounds you would like to play:"));
-		 console.log(TOTALROUNDS);
+		//  while (typeOf(TOTALROUNDS) !== "number"){
+		// 	 alert("That's not a number.");
+		// 	 TOTALROUNDS = parseInt(prompt("Tell me how many rounds you would like to play:"));
+		//  }
 		 var str = '';
 		 $('.totals').remove();
-		 for(var i = 1; i<= TOTALROUNDS; i++)
-		 {
+		 for(var i = 1; i<= TOTALROUNDS; i++) {
 			 str += "<tr id='totals' class='totals'><td>"+i+"</td><td></td><td></td></tr>";
 		 }
 		 str +=  "<tr class='totals'><th>Average</th><th></th><th></th></tr>";
 		//$("totals").remove();
 		resetGame();
 		$('#PDresult').append(str);
-
 }
 
 var opponent = 0;
@@ -208,7 +269,7 @@ function finishRound(){
 		roundPayout.push(Math.round(10*totalPay/round)/10);
 		opponentRoundPayout.push(Math.round(10*oppTotalPay/round)/10);
 		if (opponent === TOTALOPPONENTS) {
-			status.innerHTML += "<br /><br />Done. <br />A summary of your performance appears to the right.";
+			status.innerHTML += "<br /><br /> <br />A summary of your performance appears to the right.";
 			showScores();
 		} else {
 			status = document.getElementById('status2');
